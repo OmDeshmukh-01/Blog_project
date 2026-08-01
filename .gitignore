@@ -1,0 +1,51 @@
+# Virtual Environments
+LangGenv/
+venv/
+env/
+.venv/
+*.egg-info/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+dist/
+build/
+*.dist-info/
+
+# Environment variables
+.env
+# Keep .env.example (it's safe to commit)
+
+# Node / Frontend
+node_modules/
+Frontend/node_modules/
+Frontend/dist/
+Frontend/build/
+.npm/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Coverage
+.coverage
+htmlcov/
