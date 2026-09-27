@@ -105,7 +105,42 @@ class State(TypedDict):
 # -----------------------------
 # 2) LLM
 # -----------------------------
-llm = ChatOllama(model="qwen2.5:7b", temperature=0)
+import os
+from langchain_ollama import ChatOllama
+from langchain_openai import ChatOpenAI
+
+# Priority order:
+#   1. HuggingFace (production — set HUGGINGFACEHUB_API_TOKEN)
+#   2. Groq        (local dev fallback — set GROQ_API_KEY, free at console.groq.com)
+#   3. Ollama      (fully offline fallback — no key needed)
+hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
+groq_api_key = os.getenv("GROQ_API_KEY")
+
+if hf_token:
+    # ✅ PRODUCTION: HuggingFace Inference API
+    llm = ChatOpenAI(
+        model="Qwen/Qwen2.5-7B-Instruct",
+        base_url="https://api-inference.huggingface.co/v1/",
+        api_key=hf_token,
+        temperature=0.1,
+        max_tokens=2048,
+        max_retries=5,
+        timeout=120.0,
+    )
+elif groq_api_key:
+    # 🔧 LOCAL DEV FALLBACK: Groq (fast, free, works when HF is blocked locally)
+    llm = ChatOpenAI(
+        model="llama-3.1-8b-instant",
+        base_url="https://api.groq.com/openai/v1",
+        api_key=groq_api_key,
+        temperature=0.1,
+        max_tokens=2048,
+        max_retries=3,
+        timeout=60.0,
+    )
+else:
+    # 💻 OFFLINE FALLBACK: Local Ollama
+    llm = ChatOllama(model="qwen2.5:7b", temperature=0)
 
 # -----------------------------
 # 3) RAG - ChromaDB Vector Store
@@ -200,7 +235,15 @@ def analyzer_node(state: State) -> dict:
         HumanMessage(content=f"Topic: {topic}")
     ]
     resp = llm.with_structured_output(
-        schema={"type": "object", "properties": {"genre": {"type": "string"}, "persona_prompt": {"type": "string"}}, "required": ["genre", "persona_prompt"]}
+        schema={
+            "title": "AnalyzerResponse",
+            "type": "object", 
+            "properties": {
+                "genre": {"type": "string"}, 
+                "persona_prompt": {"type": "string"}
+            }, 
+            "required": ["genre", "persona_prompt"]
+        }
     ).invoke(messages_in)
 
     return {
