@@ -4,10 +4,10 @@ After=network.target
 
 [Service]
 User=ubuntu
-WorkingDirectory=/home/ubuntu/blog-app/backend
-Environment="PATH=/home/ubuntu/blog-app/venv/bin"
-EnvironmentFile=/home/ubuntu/blog-app/.env
-ExecStart=/home/ubuntu/blog-app/venv/bin/uvicorn server:fastapi_app --host 0.0.0.0 --port 8000
+WorkingDirectory=/home/ubuntu/Blog_project/Backend
+Environment="PATH=/home/ubuntu/Blog_project/venv/bin"
+EnvironmentFile=/home/ubuntu/Blog_project/.env
+ExecStart=/home/ubuntu/Blog_project/venv/bin/uvicorn server:fastapi_app --host 0.0.0.0 --port 8000
 Restart=always
 RestartSec=3
 
