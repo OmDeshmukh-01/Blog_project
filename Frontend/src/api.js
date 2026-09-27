@@ -3,9 +3,9 @@
  * Handles SSE streaming for generation/refinement and REST calls.
  */
 
-// In dev: Vite proxy or direct to 127.0.0.1:8000
-// In production: nginx on same server proxies /api/* to FastAPI
-const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+// In production (npm run build): use relative paths so nginx proxies /api/* to FastAPI
+// In development (npm run dev): call FastAPI directly on 127.0.0.1:8000
+const API_BASE = import.meta.env.PROD ? '' : 'http://127.0.0.1:8000';
 
 /**
  * Stream blog generation via SSE.
