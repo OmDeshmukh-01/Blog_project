@@ -130,7 +130,7 @@ if hf_token:
 elif groq_api_key:
     # 🔧 LOCAL DEV FALLBACK: Groq (fast, free, works when HF is blocked locally)
     llm = ChatOpenAI(
-        model="llama3-8b-8192",  # Stable Groq model (use llama-3.3-70b-versatile for higher quality)
+        model="qwen/qwen3.8-27b",  # Confirmed live on Groq (27B, great for structured blog output)
         base_url="https://api.groq.com/openai/v1",
         api_key=groq_api_key,
         temperature=0.1,
